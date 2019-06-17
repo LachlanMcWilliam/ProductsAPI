@@ -3,7 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductsApi", "ProductsApi\ProductsApi.csproj", "{21761F1F-BC47-4470-8A88-4313C52AC298}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsApi", "ProductsApi\ProductsApi.csproj", "{21761F1F-BC47-4470-8A88-4313C52AC298}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation Layer", "1 - Presentation Layer", "{FEB8FED4-0BA2-4B42-88FA-3754397F1DFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Business Layer", "2 - Business Layer", "{7B5254F5-3F4F-4265-BFCF-4F153809FF7C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Data Access Layer", "3 - Data Access Layer", "{8EB3F5B4-6E83-4C85-9C63-AAADB1088093}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandQ.Data", "BandQ.Data\BandQ.Data.csproj", "{1551BB67-3A17-4FD6-A817-BCB3A2C11C41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandQ.Services", "BandQ.Services\BandQ.Services.csproj", "{26AA6B62-551A-4650-866F-DA77D8C9F5FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Solutions Layer", "0 - Solutions Layer", "{5507E85B-2755-4115-8137-AC2EC9498B2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandQ.Commons", "BandQ.Commons\BandQ.Commons.csproj", "{B690EFA5-842D-4B70-9532-4E12FB4B7A4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +29,27 @@ Global
 		{21761F1F-BC47-4470-8A88-4313C52AC298}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21761F1F-BC47-4470-8A88-4313C52AC298}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21761F1F-BC47-4470-8A88-4313C52AC298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1551BB67-3A17-4FD6-A817-BCB3A2C11C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1551BB67-3A17-4FD6-A817-BCB3A2C11C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1551BB67-3A17-4FD6-A817-BCB3A2C11C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1551BB67-3A17-4FD6-A817-BCB3A2C11C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26AA6B62-551A-4650-866F-DA77D8C9F5FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26AA6B62-551A-4650-866F-DA77D8C9F5FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26AA6B62-551A-4650-866F-DA77D8C9F5FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26AA6B62-551A-4650-866F-DA77D8C9F5FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B690EFA5-842D-4B70-9532-4E12FB4B7A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B690EFA5-842D-4B70-9532-4E12FB4B7A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B690EFA5-842D-4B70-9532-4E12FB4B7A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B690EFA5-842D-4B70-9532-4E12FB4B7A4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{21761F1F-BC47-4470-8A88-4313C52AC298} = {FEB8FED4-0BA2-4B42-88FA-3754397F1DFF}
+		{1551BB67-3A17-4FD6-A817-BCB3A2C11C41} = {8EB3F5B4-6E83-4C85-9C63-AAADB1088093}
+		{26AA6B62-551A-4650-866F-DA77D8C9F5FE} = {7B5254F5-3F4F-4265-BFCF-4F153809FF7C}
+		{B690EFA5-842D-4B70-9532-4E12FB4B7A4C} = {5507E85B-2755-4115-8137-AC2EC9498B2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F226A871-192E-4E81-BCA6-14BD19871F06}

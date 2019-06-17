@@ -1,4 +1,4 @@
-﻿namespace ProductsApi.Entities
+﻿namespace BandQ.Data.Classes
 {
     public class Image
     {

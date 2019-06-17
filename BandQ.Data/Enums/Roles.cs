@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProductsApi.Entities
+namespace BandQ.Data.Enums
 {
     public enum Roles
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductsApi.Entities;
+using BandQ.Data.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
