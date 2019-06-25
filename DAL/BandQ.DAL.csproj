@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BandQ.Commons\BandQ.Commons.csproj" />
-    <ProjectReference Include="..\ProductsApi\ProductsApi.csproj" />
   </ItemGroup>
 
 </Project>

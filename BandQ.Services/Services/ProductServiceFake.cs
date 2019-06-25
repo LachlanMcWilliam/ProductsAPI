@@ -1,5 +1,6 @@
 ﻿using BandQ.Commons.Services;
 using BandQ.Commons.Services.Models;
+using ProductsApi;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,14 @@ namespace BandQ.Services.Services
 {
     public class ProductServiceFake : IProductService
     {
+
+        private readonly Context _context;
+
+        public ProductServiceFake (Context context)
+        {
+            _context = context;
+        }
+
         public Task<ProductModel> AddProduct()
         {
             throw new NotImplementedException();
