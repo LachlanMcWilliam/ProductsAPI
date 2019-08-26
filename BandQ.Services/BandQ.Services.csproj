@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BandQ.Commons\BandQ.Commons.csproj" />
-    <ProjectReference Include="..\ProductsApi\ProductsApi.csproj" />
+    <ProjectReference Include="..\BandQ.Data\BandQ.Data.csproj" />
   </ItemGroup>
 
 </Project>

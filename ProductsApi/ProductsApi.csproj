@@ -12,11 +12,17 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.1" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.11" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.Core.Extension" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BandQ.Data\BandQ.Data.csproj" />
+    <ProjectReference Include="..\BandQ.Commons\BandQ.Commons.csproj" />
+    <ProjectReference Include="..\BandQ.Services\BandQ.Services.csproj" />
+    <ProjectReference Include="..\DAL\BandQ.DAL.csproj" />
   </ItemGroup>
 
 </Project>

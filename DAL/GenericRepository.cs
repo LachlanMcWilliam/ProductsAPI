@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BandQ.DAL
 {
-    public abstract class GenericRepository<TContext> : IGenericRepository where TContext: DbContext, new()
+    public class GenericRepository<TContext> : IGenericRepository where TContext: DbContext, new()
     {
         private TContext _context;
 
@@ -29,7 +29,14 @@ namespace BandQ.DAL
         {
             try
             {
-                _context.Set<T>().Add(entity);
+                using(var transaction = _context.Database.BeginTransaction())
+                {
+                    _context.Set<T>().Add(entity);
+
+                    Commit();
+
+                    transaction.Commit();
+                }
             }
             catch(Exception ex)
             {
@@ -42,7 +49,14 @@ namespace BandQ.DAL
         {
             try
             {
-                await _context.Set<T>().AddAsync(entity);
+                using(var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    await _context.Set<T>().AddAsync(entity);
+
+                    await CommitAsync();
+
+                    transaction.Commit();
+                }
             }
             catch(Exception ex)
             {
@@ -57,7 +71,14 @@ namespace BandQ.DAL
             {
                 foreach (var item in entities)
                 {
-                    await _context.Set<T>().AddAsync(item);
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
+                    {
+                        await _context.Set<T>().AddAsync(item);
+
+                        await CommitAsync();
+
+                        transaction.Commit();
+                    }
                 }
             }
             catch(Exception ex)
@@ -69,77 +90,100 @@ namespace BandQ.DAL
 
         public IQueryable<T> AllIncluding<T>(params Expression<Func<T, object>>[] include) where T : class
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = _context.Set<T>();
+
+            return include.Aggregate(query, (current, item) => current.Include(item));
         }
 
         public void Commit()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
-        public void CommitAsync()
+        public async Task CommitAsync()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
 
         public bool Delete<T>(T entity) where T : class
         {
             try
             {
-                if (_context.Entry(entity).State == EntityState.Detached)
+                using(var transaction = _context.Database.BeginTransaction())
                 {
-                    _context.Set<T>().Attach(entity);
-                }
+                    if (_context.Entry(entity).State == EntityState.Detached)
+                    {
+                        _context.Set<T>().Attach(entity);
+                    }
 
-                _context.Set<T>().Remove(entity);
+                    _context.Set<T>().Remove(entity);
+
+                    Commit();
+
+                    transaction.Commit();
+                }
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 return false;
             }
             return true;
         }
 
-        public Task<bool> DeleteAsync<T>(T entity) where T : class
+        public async Task<bool> DeleteAsync<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    if (_context.Entry(entity).State == EntityState.Detached)
+                    {
+                        _context.Set<T>().Attach(entity);
+                    }
 
-        public bool DeleteById(int Id)
-        {
-            throw new NotImplementedException();
-        }
+                    _context.Set<T>().Remove(entity);
 
-        public Task<bool> DeleteByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+                    await CommitAsync();
 
-        public T GetById<T>(int Id) where T : class
-        {
-            throw new NotImplementedException();
+                    transaction.Commit();
+                }
+            } catch(DbUpdateException ex)
+            {
+                return false;
+            }
+            return true;
         }
-
-        public Task<T> GetByIdAsync<T>(int Id) where T : class
+        public async Task<T> GetSingleAsync<T>(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] include) where T : class
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                    var items = _context.Set<T>();
 
-        public Task<T> GetSingleAsync<T>(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] include) where T : class
-        {
-            throw new NotImplementedException();
+                    return await items.Where<T>(where).FirstOrDefaultAsync<T>();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public T Update<T>(T entity) where T : class
         {
             try
             {
-                var entry = _context.Entry(entity);
-                _context.Set<T>().Attach(entity);
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    var entry = _context.Entry(entity);
+                    _context.Set<T>().Attach(entity);
 
-                entry.State = EntityState.Modified;
+                    entry.State = EntityState.Modified;
+
+                    Commit();
+
+                    transaction.Commit();
+                }
             }
-            catch(Exception ex)
+            catch(DbUpdateException ex)
             {
                 throw;
             }
@@ -147,9 +191,26 @@ namespace BandQ.DAL
             return entity;
         }
 
-        public Task<T> UpdateAsync<T>(T entity) where T : class
+        public async Task<T> UpdateAsync<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            try
+            {
+                using(var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    var entry = _context.Entry(entity);
+                    _context.Set<T>().Attach(entity);
+
+                    entry.State = EntityState.Modified;
+
+                    await CommitAsync();
+
+                    transaction.Commit();
+                }
+            } catch(DbUpdateException ex)
+            {
+                throw;
+            }
+            return entity;
         }
 
         public async Task<bool> DeleteManyAsync<T>(params T[] entities) where T : class
@@ -158,12 +219,19 @@ namespace BandQ.DAL
             {
                 foreach (var item in entities)
                 {
-                    if (_context.Entry(item).State == EntityState.Detached)
+                    using(var transaction = await _context.Database.BeginTransactionAsync())
                     {
-                        _context.Set<T>().Attach(item);
-                    }
+                        if (_context.Entry(item).State == EntityState.Detached)
+                        {
+                            _context.Set<T>().Attach(item);
+                        }
 
-                    _context.Set<T>().Remove(item);
+                        _context.Set<T>().Remove(item);
+
+                        await CommitAsync();
+
+                        transaction.Commit();
+                    }
                 }
             }
             catch(Exception ex)
@@ -180,23 +248,24 @@ namespace BandQ.DAL
             {
                 foreach (var item in entities)
                 {
-                    var entry = _context.Entry(item);
-                    _context.Set<T>().Attach(item);
+                    using(var transaction = await _context.Database.BeginTransactionAsync())
+                    {
+                        var entry = _context.Entry(item);
+                        _context.Set<T>().Attach(item);
 
-                    entry.State = EntityState.Modified;
+                        entry.State = EntityState.Modified;
+                        await CommitAsync();
+
+                        transaction.Commit();
+                    }
                 }
             }
-            catch(Exception ex)
+            catch(DbUpdateException ex)
             {
                 throw;
             }
 
             return entities;
         }
-
-        public Task<T[]> GetManyByIdAsync<T>(params int[] Ids) where T : class
-        {
-            throw new NotImplementedException();
         }
-    }
 }

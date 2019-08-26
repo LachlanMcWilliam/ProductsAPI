@@ -1,5 +1,4 @@
 ﻿using BandQ.Commons.Services.Models;
-using BandQ.Data.Classes;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -26,28 +25,28 @@ namespace BandQ.Commons.Services
         /// <returns>
         /// ProductModel
         /// </returns>
-        Task<ProductModel> UpdateProduct();
+        Task<ProductModel> UpdateProduct(ProductModel product);
         /// <summary>
         /// Delete product specified by its id
         /// </summary>
         /// <returns>
         /// Boolean
         /// </returns>
-        Task<bool> DeleteProduct();
+        Task<bool> DeleteProduct(ProductModel product);
         /// <summary>
         /// Adds a ProductModel to the Database
         /// </summary>
         /// <returns>
         /// ProductModel
         /// </returns>
-        Task<ProductModel> AddProduct();
+        Task<ProductModel> AddProduct(ProductModel product);
         /// <summary>
         /// Gets a Product form the Database by searching for the Id
         /// </summary>
         /// <returns>
         /// ProductModel
         /// </returns>
-        Task<ProductModel> GetProductById();
+        Task<ProductModel> GetProductById(int Id);
         
     }
 }

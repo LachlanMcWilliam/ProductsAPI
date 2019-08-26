@@ -9,7 +9,7 @@ namespace BandQ.Data.Classes
     {
         public int Id { get; set; }
         public String Name { get; set; }
-        public int Price { get; set; }
+        public Decimal Price { get; set; }
         public String Description { get; set; }
         public int Stock { get; set; }
         public decimal Weight { get; set; }
