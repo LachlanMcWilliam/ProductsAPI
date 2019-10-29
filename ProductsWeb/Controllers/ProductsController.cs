@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using BandQ.Commons.Services;
+using BandQ.Commons.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProductsWeb.Models;
@@ -10,43 +13,20 @@ namespace ProductsWeb.Controllers
 {
     public class ProductsController : Controller
     {
+        private readonly IMapper _mapper;
+        private readonly IProductService _service;
+
+        public ProductsController(IMapper mapper, IProductService service)
+        {
+            _mapper = mapper;
+            _service = service;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<ProductsViewModel> productList = new List<ProductsViewModel> {
-                 new ProductsViewModel
-                 {
-                      Description = "Comes in bars",
-                        Name = "Steel",
-                         Price = 25,
-                          Stock = 400,
-                           Id = 1
-                 },
-                 new ProductsViewModel
-                 {
-                      Description = "Comes in planks",
-                        Name = "Wood",
-                         Price = 15,
-                          Stock = 600,
-                           Id = 2
-                 },
-                 new ProductsViewModel
-                 {
-                      Description = "Comes in bags",
-                        Name = "Soil",
-                         Price = 5,
-                          Stock = 1500,
-                           Id = 3
-                 },
-                 new ProductsViewModel
-                 {
-                      Description = "Heavy",
-                        Name = "Rock",
-                         Price = 7,
-                          Stock = 400,
-                           Id = 4
-                 }
-            };
+            var products = await _service.GetProducts();
+            List<ProductsViewModel> productList = _mapper.Map<List<ProductsViewModel>>(products);
             return View(productList);
         }
         public async Task<IActionResult> Create()
@@ -59,6 +39,8 @@ namespace ProductsWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                var product = _mapper.Map<ProductModel>(products);
+                await _service.AddProduct(product);
                 return View();
             }
             else
@@ -68,13 +50,21 @@ namespace ProductsWeb.Controllers
             
         }
         [HttpPost]
-        public async Task<IActionResult> Edit([Bind("Name, Price, Description, Stock")] CreateProductViewModel product)
+        public async Task<IActionResult> Edit(int Id, [Bind("Name, Price, Description, Stock")] UpdateProductViewModel product)
         {
+            product.Id = Id;
+
+            var updatedProduct = _mapper.Map<ProductModel>(product);
+            await _service.UpdateProduct(updatedProduct);
+
             return View();
         }
-        public async Task<IActionResult> Edit()
+        [HttpGet]
+        public async Task<IActionResult> Edit(int Id)
         {
-            return View();
+            var product = await _service.GetProductById(Id);
+            var mappedProduct = _mapper.Map<CreateProductViewModel>(product);
+            return View(mappedProduct);
         }
         public async Task<IActionResult> Delete(int id)
         {

@@ -13,6 +13,11 @@ using Microsoft.EntityFrameworkCore;
 using ProductsWeb.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
+using BandQ.Commons.Services;
+using BandQ.DAL;
+using BandQ.Services.Services;
+using BandQ.Commons.DAL.Interfaces;
 
 namespace ProductsWeb
 {
@@ -37,11 +42,15 @@ namespace ProductsWeb
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("BandQConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddAutoMapper(typeof(BandQProfile));
+            services.AddTransient<IProductService, ProductsService>();
+            services.AddTransient<IGenericRepository, GenericRepository<Context>>();
+            services.AddDbContext<Context>(x => x.UseSqlServer(Configuration.GetConnectionString("BandQConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
