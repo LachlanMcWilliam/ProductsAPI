@@ -19,7 +19,8 @@ namespace ProductsWeb
             CreateMap<UpdateProductViewModel, ProductModel>();
             CreateMap<ProductModel, UpdateProductViewModel > ();
             CreateMap<ProductModel, CreateProductViewModel> ();
-
+            CreateMap<ProductModel, ProductDetailsViewModel>();
+            CreateMap<ProductModel, DeleteProductViewModel>();
 
         }
 

@@ -49,6 +49,15 @@ namespace BandQ.Services.Services
             return true;
         }
 
+        public async Task<bool> DeleteProductById(int id)
+        {
+            Product productEntity = await _productRepository.GetSingleAsync<Product>(x => x.Id == id);
+            _productRepository.Delete<Product>(productEntity);
+            await _productRepository.CommitAsync();
+
+            return true;
+        }
+
         public async Task<ProductModel> GetProductById(int Id)
         {
             try

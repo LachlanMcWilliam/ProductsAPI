@@ -29,6 +29,11 @@ namespace BandQ.Services.Services
             throw new NotImplementedException();
         }
 
+        public Task<bool> DeleteProductById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ProductModel> GetProductById(int Id)
         {
             throw new NotImplementedException();

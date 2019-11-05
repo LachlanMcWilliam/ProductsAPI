@@ -35,13 +35,14 @@ namespace ProductsWeb.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name, Price, Description, Stock")] CreateProductViewModel products)
         {
             if (ModelState.IsValid)
             {
                 var product = _mapper.Map<ProductModel>(products);
                 await _service.AddProduct(product);
-                return View();
+                return RedirectToAction("Index");
             }
             else
             {
@@ -50,6 +51,7 @@ namespace ProductsWeb.Controllers
             
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int Id, [Bind("Name, Price, Description, Stock")] UpdateProductViewModel product)
         {
             product.Id = Id;
@@ -57,7 +59,7 @@ namespace ProductsWeb.Controllers
             var updatedProduct = _mapper.Map<ProductModel>(product);
             await _service.UpdateProduct(updatedProduct);
 
-            return View();
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
@@ -68,12 +70,22 @@ namespace ProductsWeb.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            var product = await _service.GetProductById(id);
+            var mappedProduct = _mapper.Map<DeleteProductViewModel>(product);
+            return View(mappedProduct);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteById(int id)
         {
-            return View();
+            var result = await _service.DeleteProductById(id);
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _service.GetProductById(id);
+            var mappedProduct = _mapper.Map<ProductDetailsViewModel>(product);
+            return View(mappedProduct);
         }
     }
 }

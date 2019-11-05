@@ -47,6 +47,6 @@ namespace BandQ.Commons.Services
         /// ProductModel
         /// </returns>
         Task<ProductModel> GetProductById(int Id);
-        
+        Task<bool> DeleteProductById(int id);
     }
 }
